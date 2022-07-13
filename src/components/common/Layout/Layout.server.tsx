@@ -4,9 +4,9 @@ function Layout({ children }: any) {
   const { pathname } = useUrl();
   const isHome = pathname === "/";
   const {
-    data: { shop },
+    data: { collections },
   } = useShopQuery({
-    query: SHOP_QUERY,
+    query: query,
     cache: CacheLong(),
   });
   return (
@@ -20,7 +20,8 @@ function Layout({ children }: any) {
         >
           <div className="flex gap-12">
             <Link className="font-bold" to="/">
-              {shop.name}
+              {/* {shop.name} */}
+              {collections ? "Yes" : "no"}
             </Link>
           </div>
         </header>
@@ -34,11 +35,24 @@ function Layout({ children }: any) {
 }
 
 export default Layout;
-const SHOP_QUERY = gql`
-  query ShopInfo {
-    shop {
-      name
-      description
+// const SHOP_QUERY = gql`
+//   query ShopInfo {
+//     shop {
+//       name
+//       description
+//       id
+//       moneyFormat
+//     }
+//   }
+// `;
+const query = gql`
+  query FeaturedCollections {
+    collections(first: 3, query: "collection_type:smart", sortKey: UPDATED_AT) {
+      nodes {
+        id
+        title
+        handle
+      }
     }
   }
 `;
